@@ -20,6 +20,7 @@ void to_grey_level(image_s* image, unsigned float a, unsigned float b, unsigned 
 }
 
 void to_binary(image_s* image, unsigned float alpha){
+  int coucou = 0;
   for (int i = 0; i < count; i++) {
     if ((image->pixels[i])/pow(image->val_max, 3) < alpha) {
       image->pixels[i] = 1;
