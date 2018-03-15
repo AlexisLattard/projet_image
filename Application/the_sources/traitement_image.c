@@ -4,9 +4,7 @@
 #include "../the_headers/traitement_image.h"
 
 image_s* lire_ppm(FILE* f){
-  image_s* image = malloc(sizeof(image_s));
-  fscanf(f,"%s %d %d %d",image->type,&(image->largeur),&(image->hauteur),&(image->val_max));
-  printf("%s %d %d %d\n",image->type,image->largeur,image->hauteur,image->val_max );
+
 }
 
 uint64_t mask(uint64_t pixel, unsigned int longueur, unsigned int debut) {
@@ -38,8 +36,6 @@ void to_pbm(image_s* image){
 }
 
 int main(int argc, char const *argv[]) {
-  FILE* f = fopen("disney_045.ppm","r");
-  image_s* image = lire_ppm(f);
 
   return 0;
 }
