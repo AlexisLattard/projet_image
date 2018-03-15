@@ -1,9 +1,9 @@
 #ifndef TRAITEMENT_H
 #define TRAITEMENT_H
 
-typedef enum image_type image_type{
+typedef enum image_type{
   P1 = 1, P2 = 2, P3 = 3
-};
+}image_type;
 
 typedef struct {
   image_type type;
