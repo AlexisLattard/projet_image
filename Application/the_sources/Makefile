@@ -6,9 +6,9 @@ EXEC = traitement_image
 
 all : $(EXEC)
 
-# Utilisation des variables internes @ (la cible de l'action)
-#	et ^ (la liste des dependances)
-$(EXEC): $@.o main.o
+# Utilisation des variables internes ^ (la liste des dependances),
+#	ainsi que @ (la cible de l'action) dans l'action suivante
+$(EXEC): $(EXEC).o main.o
 	$(CC) -o $(BIN_DIR)/$(EXEC) $^
 
 # Utilisation de la règle générique .o.c qui effectue l'action de
