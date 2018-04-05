@@ -1,8 +1,10 @@
-LIB_DIR=../../lib
-HEAD_DIR=../the_headers
+all :
 
-traitement_image: traitement_image.o
-		gcc -o ../bin/traitement_image traitement_image.o
+traitement_image: traitement_image.o main.o
+		gcc -o ../bin/traitement_image traitement_image.o main.o
 
-traitement_image.o: traitement_image.c $(HEAD_DIR)/traitement_image.h
-	gcc -o traitement_image.o -c traitement_image.c
+main.o: main.c
+	gcc -o main.o -I ../the_headers -c main.c
+
+traitement_image.o: traitement_image.c
+	gcc -o traitement_image.o -I ../the_headers -c traitement_image.c
