@@ -1,10 +1,15 @@
-all :
+HEAD_DIR = ../the_headers
+BIN_DIR = ../bin
+CC = gcc
+EXEC = traitement_image
 
-traitement_image: traitement_image.o main.o
-		gcc -o ../bin/traitement_image traitement_image.o main.o
+all : $(EXEC)
 
-main.o: main.c
-	gcc -o main.o -I ../the_headers -c main.c
+$(EXEC): $@.o main.o
+	$(CC) -o $(BIN_DIR)/$(EXEC) $^
 
-traitement_image.o: traitement_image.c
-	gcc -o traitement_image.o -I ../the_headers -c traitement_image.c
+%.o: %.c
+	$(CC) -o $@ -I $(HEAD_DIR) -c $^
+
+clean :
+	rm -f *.o *.pgm *.pbm $(BIN_DIR)/*
