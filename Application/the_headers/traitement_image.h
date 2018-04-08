@@ -1,6 +1,8 @@
 #ifndef STRUCT_IMAGE_H
 #define STRUCT_IMAGE_H
 
+#define TAILLE_COULEUR 16
+
 typedef enum image_type {
   P1 = 1, P2 = 2, P3 = 3
 }image_type;
@@ -13,21 +15,27 @@ typedef struct {
   uint64_t* pixels;
 }image_s;
 
-uint64_t r_pixel(uint64_t pixel);
+void set_pixel(image_s* image,int num_pixel, uint64_t red, uint64_t green, uint64_t blue);
 
-uint64_t g_pixel(uint64_t pixel);
+uint64_t get_r_pixel(uint64_t pixel);
 
-uint64_t b_pixel(uint64_t pixel);
+uint64_t get_g_pixel(uint64_t pixel);
+
+uint64_t get_b_pixel(uint64_t pixel);
 
 image_s* lire_ppm(FILE* f);
 
-void to_grey_level(image_s* image, float a, float b, float c);
+image_s* to_grey_level(image_s* image);
 
-void to_binary(image_s* image, float alpha);
+image_s* to_binary(image_s* image);
 
 void to_pgm(image_s* image, char* name);
 
 void to_pbm(image_s* image, char* name);
+
+void save_pgm(image_s* image,char* name);
+
+void save_pbm(image_s* image,char* name);
 
 
 #endif

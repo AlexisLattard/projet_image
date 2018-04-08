@@ -4,46 +4,49 @@
 #include <string.h>
 #include "traitement_image.h"
 
-
+/* Initialise les variable du programme
+en analysant les termes passé en paramètre */
+void commande(char const *argv[], int* b, int* g, int* nb_file, char** tab_name, FILE** tab_f){
+  for (int i = 1; argv[i] ; i++) {
+    if (!strcmp(argv[i],"-b")) {
+      *b = 1;
+    }
+    else if (!strcmp(argv[i],"-g")) {
+      *g = 1;
+    }
+    else if (fopen(argv[i],"r")) {
+      tab_f[*nb_file] = fopen(argv[i],"r");
+      tab_name[*nb_file] = malloc(strlen(argv[i]) * sizeof(char));
+      strncpy(tab_name[(*nb_file)++],argv[i],strlen(argv[i])-4);
+    }
+  }
+}
 
 int main(int argc, char const *argv[]) {
-  float a=0.299,b=0.587,c=0.114,alpha=0.5;
-  FILE* f;
+  FILE** tab_f = malloc(argc * sizeof(FILE*));
+  tab_f[0] = stdin;
   image_s* image;
+  int op_b=0,op_g=0,nb_file = 0;
 
-  if (argc == 1) {
-    printf("Il manque des paramètres : \n- \"-g\" pour une image en nuance de gris\n- \"-b\" pour une image en noir et blanc\n- Nom d'un fichier .ppm à transformer (optionel)");
-  }
-  else if(strcmp(argv[1],"-g") && strcmp(argv[1],"-b")){
-    printf("Mauvais paramètre: veuillez utiliser -g ou -b\n");
-  } else if(argc > 2 && (f = fopen(argv[2],"r"))){ // Bon fichier
-    char* name;
-    strcpy(name,argv[2]);
-    image = lire_ppm(f);
-    if (!strcmp(argv[1],"-g")) {
-      to_grey_level(image,a,b,c);
-      strchr(name,'.')[2] = 'g';
-      to_pgm(image,name);
-      printf("On sauve l'image au format PGM dans le fichier %s\n", name);
+  char** tab_name = malloc(argc * sizeof(char*));
+  tab_name[0] = "image";
+
+  commande(argv,&op_b,&op_g,&nb_file,tab_name,tab_f);
+
+  if (!(op_b || op_g))
+    printf("Il manque des paramètres : \n- \"-g\" pour une image en nuance de gris\n- \"-b\" pour une image en noir et blanc\n- Nom d'un fichier .ppm à transformer (optionel)\n");
+  else{
+    if (!nb_file){
+      printf("Pas de nom de fichier ou mauvais nom de fichier, on travaille sur l'entree std\n");
     }
-    else {
-      to_binary(image,alpha);
-      strchr(name,'.')[2] = 'b';
-      to_pbm(image,name);
-      printf("On sauve l'image au format PBM dans le fichier %s\n", name);
-    }
-  } else { // entrée standard
-    printf("Pas de nom de fichier ou mauvais nom de fichier, on travaille sur l'entree std :\nA vous de vous assurer que les donnees que vous entrez sont valides pour obtenir un resultat coherent (CTRL+D puis entree pour terminer)\n");
-    image = lire_ppm(stdin);
-    if (!strcmp(argv[1],"-g")) {
-      to_grey_level(image,a,b,c);
-      to_pgm(image,"image.pgm");
-      printf("On sauve l'image au format PGM dans le fichier image.pgm\n");
-    }
-    else {
-      to_binary(image,alpha);
-      to_pbm(image,"image.pbm");
-      printf("On sauve l'image au format PBM dans le fichier image.pbm\n");
+    int num_boucle = 0;
+    while(tab_f[num_boucle]){
+      image = lire_ppm(tab_f[num_boucle]);
+      if (op_g)
+      save_pgm(image,tab_name[num_boucle]);
+      if (op_b)
+      save_pbm(image,tab_name[num_boucle]);
+      num_boucle++;
     }
   }
 
